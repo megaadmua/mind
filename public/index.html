@@ -70,12 +70,29 @@
 
     /* Item selection */
     #items div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
     }
 
     #items input {
       width: 50px;
       text-align: center;
+    }
+
+    .quantity-buttons {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-buttons button {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      width: 30px;
+      height: 30px;
+      margin: 0 5px;
+      cursor: pointer;
     }
 
     /* Delivery options */
@@ -90,6 +107,14 @@
       border-radius: 5px;
       margin-bottom: 20px;
     }
+
+    /* Total amount display */
+    #total-amount {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
@@ -102,15 +127,27 @@
       <div id="items">
         <div>
           <label>Розовый:</label>
-          <input type="number" id="pink" min="0" value="0">
+          <div class="quantity-buttons">
+            <button type="button" class="decrement" data-item="pink">-</button>
+            <input type="number" id="pink" min="0" value="0">
+            <button type="button" class="increment" data-item="pink">+</button>
+          </div>
         </div>
         <div>
           <label>Черный:</label>
-          <input type="number" id="black" min="0" value="0">
+          <div class="quantity-buttons">
+            <button type="button" class="decrement" data-item="black">-</button>
+            <input type="number" id="black" min="0" value="0">
+            <button type="button" class="increment" data-item="black">+</button>
+          </div>
         </div>
         <div>
           <label>Белый:</label>
-          <input type="number" id="white" min="0" value="0">
+          <div class="quantity-buttons">
+            <button type="button" class="decrement" data-item="white">-</button>
+            <input type="number" id="white" min="0" value="0">
+            <button type="button" class="increment" data-item="white">+</button>
+          </div>
         </div>
       </div>
 
@@ -125,6 +162,8 @@
 
       <button type="submit">Оплатить</button>
       <div id="error-message"></div>
+
+      <div id="total-amount">Итоговая сумма: 0 крон</div>
     </form>
   </div>
 
@@ -133,6 +172,47 @@
     const elements = stripe.elements();
     const card = elements.create('card');
     card.mount('#card-element');
+
+    const prices = {
+      pink: 100,
+      black: 120,
+      white: 110,
+      delivery: 0
+    };
+
+    const updateTotal = () => {
+      const pink = parseInt(document.getElementById('pink').value) || 0;
+      const black = parseInt(document.getElementById('black').value) || 0;
+      const white = parseInt(document.getElementById('white').value) || 0;
+      const delivery = parseInt(document.getElementById('delivery').value) || 0;
+
+      const total = (pink * prices.pink) + (black * prices.black) + (white * prices.white) + delivery;
+      document.getElementById('total-amount').innerText = `Итоговая сумма: ${total} крон`;
+    };
+
+    // Event listeners for increment and decrement buttons
+    document.querySelectorAll('.increment').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.getAttribute('data-item');
+        const input = document.getElementById(item);
+        input.value = parseInt(input.value) + 1;
+        updateTotal();
+      });
+    });
+
+    document.querySelectorAll('.decrement').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.getAttribute('data-item');
+        const input = document.getElementById(item);
+        if (parseInt(input.value) > 0) {
+          input.value = parseInt(input.value) - 1;
+        }
+        updateTotal();
+      });
+    });
+
+    // Update the total when the page loads or the form is modified
+    updateTotal();
 
     document.getElementById('payment-form').addEventListener('submit', async (e) => {
       e.preventDefault();
