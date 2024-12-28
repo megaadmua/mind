@@ -173,10 +173,11 @@
     const card = elements.create('card');
     card.mount('#card-element');
 
+    // Стоимость товара: 490 чешских крон за единицу
     const prices = {
-      pink: 100,
-      black: 120,
-      white: 110,
+      pink: 490,
+      black: 490,
+      white: 490,
       delivery: 0
     };
 
@@ -186,11 +187,12 @@
       const white = parseInt(document.getElementById('white').value) || 0;
       const delivery = parseInt(document.getElementById('delivery').value) || 0;
 
+      // Расчет итоговой суммы
       const total = (pink * prices.pink) + (black * prices.black) + (white * prices.white) + delivery;
       document.getElementById('total-amount').innerText = `Итоговая сумма: ${total} крон`;
     };
 
-    // Event listeners for increment and decrement buttons
+    // Обработчики для кнопок "+" и "-"
     document.querySelectorAll('.increment').forEach(button => {
       button.addEventListener('click', () => {
         const item = button.getAttribute('data-item');
@@ -211,9 +213,10 @@
       });
     });
 
-    // Update the total when the page loads or the form is modified
+    // Обновление суммы при изменении данных
     updateTotal();
 
+    // Отправка формы и процесс оплаты
     document.getElementById('payment-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
