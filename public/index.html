@@ -6,35 +6,127 @@
   <title>Checkout</title>
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Global styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 2em;
+      color: #333;
+    }
+
+    /* Form container */
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form elements */
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    input[type="number"],
+    select,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    /* Error message */
+    #error-message {
+      color: red;
+      text-align: center;
+      font-size: 1.1em;
+      margin-top: 10px;
+    }
+
+    /* Item selection */
+    #items div {
+      margin-bottom: 15px;
+    }
+
+    #items input {
+      width: 50px;
+      text-align: center;
+    }
+
+    /* Delivery options */
+    #delivery {
+      font-size: 1em;
+    }
+
+    /* Card element container */
+    #card-element {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Оплата товаров</h1>
-  <form id="payment-form">
-    <label for="item">Выберите товар:</label>
-    <div id="items">
-      <div>
-        <label>Розовый:</label>
-        <input type="number" id="pink" min="0" value="0">
+
+  <div class="container">
+    <form id="payment-form">
+      <label for="item">Выберите товар:</label>
+      <div id="items">
+        <div>
+          <label>Розовый:</label>
+          <input type="number" id="pink" min="0" value="0">
+        </div>
+        <div>
+          <label>Черный:</label>
+          <input type="number" id="black" min="0" value="0">
+        </div>
+        <div>
+          <label>Белый:</label>
+          <input type="number" id="white" min="0" value="0">
+        </div>
       </div>
-      <div>
-        <label>Черный:</label>
-        <input type="number" id="black" min="0" value="0">
-      </div>
-      <div>
-        <label>Белый:</label>
-        <input type="number" id="white" min="0" value="0">
-      </div>
-    </div>
-    <label for="delivery">Выберите доставку:</label>
-    <select id="delivery">
-      <option value="89">Чешская почта - 89 крон</option>
-      <option value="149">Засилковня - 149 крон</option>
-      <option value="149">ДПД - 149 крон</option>
-    </select>
-    <div id="card-element"><!-- Stripe Elements появится здесь --></div>
-    <button type="submit">Оплатить</button>
-    <div id="error-message"></div>
-  </form>
+
+      <label for="delivery">Выберите доставку:</label>
+      <select id="delivery">
+        <option value="89">Чешская почта - 89 крон</option>
+        <option value="149">Засилковня - 149 крон</option>
+        <option value="149">ДПД - 149 крон</option>
+      </select>
+
+      <div id="card-element"><!-- Stripe Elements will be inserted here --></div>
+
+      <button type="submit">Оплатить</button>
+      <div id="error-message"></div>
+    </form>
+  </div>
 
   <script>
     const stripe = Stripe('pk_live_51QTu9SFa6asb2J8MYB3Fjp7SQqjeCW7aGke3iQ0b8Yllopms5ZN4DTZFRTvMCcujz9lcoPsUWt8S8zXcOeUCmMKV00oC8qeM25');
@@ -75,5 +167,6 @@
       }
     });
   </script>
+
 </body>
 </html>
